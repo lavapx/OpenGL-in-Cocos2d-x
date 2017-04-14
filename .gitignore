@@ -45,3 +45,26 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.db
+proj.win32/OpenGL.VC.VC.opendb
+*.obj
+*.log
+*.tlog
+*.idb
+*.pdb
+proj.win32/Debug.win32/CloseSelected.png
+proj.win32/Debug.win32/fonts/arial.ttf
+proj.win32/Debug.win32/CloseNormal.png
+*.dll
+*.lib
+proj.win32/.vs/OpenGL/v14/.suo
+proj.win32/Debug.win32/game.res
+*.exe
+proj.win32/Debug.win32/OpenGL.exp
+*.ilk
+proj.win32/Debug.win32/OpenGL.vcxprojResolveAssemblyReference.cache
+proj.win32/Debug.win32/HelloWorld.png
+proj.win32/Debug.win32/libcocos2d.exp
+proj.win32/Debug.win32/fonts/Marker Felt.ttf
+proj.win32/Debug.win32/Shaders/BasicShader.frag
+proj.win32/Debug.win32/Shaders/BasicShader.vert

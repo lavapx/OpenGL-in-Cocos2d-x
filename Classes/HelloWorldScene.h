@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 
+
 class HelloWorld : public cocos2d::Layer
 {
 public:
@@ -10,11 +11,26 @@ public:
 
     virtual bool init();
     
+	virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags) override;
+
+	void onDraw(const cocos2d::Mat4 &transform, uint32_t flags);
+
+
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
+
+private:
+
+	void createGL();
+
+	cocos2d::GLProgram* glProgram;
+
+	GLuint program;
+	GLuint vbo1, vbo2;
+	GLuint vao;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

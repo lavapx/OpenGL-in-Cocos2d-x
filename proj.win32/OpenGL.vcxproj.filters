@@ -10,6 +10,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\shaders">
+      <UniqueIdentifier>{3a3db7e6-f7d2-4ce2-ab92-fa0cdffba0c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -37,5 +40,13 @@
     <ResourceCompile Include="game.rc">
       <Filter>resource</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Resources\Shaders\BasicShader.frag">
+      <Filter>src\shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\BasicShader.vert">
+      <Filter>src\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

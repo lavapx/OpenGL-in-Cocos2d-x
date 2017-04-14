@@ -3,6 +3,7 @@
 
 USING_NS_CC;
 
+
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
@@ -51,27 +52,7 @@ bool HelloWorld::init()
 
     /////////////////////////////
     // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-
-    // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
+	this->createGL();
     
     return true;
 }
@@ -92,4 +73,91 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
     
     
+}
+
+void HelloWorld::createGL()
+{
+
+	glProgram = GLProgram::createWithFilenames("Shaders/BasicShader.vert", "Shaders/BasicShader.frag");
+
+	auto glProgramState = GLProgramState::create(glProgram);
+	setGLProgramState(glProgramState);
+
+	CHECK_GL_ERROR_DEBUG();
+
+	auto size = Director::getInstance()->getWinSize();
+
+	GLfloat vertices[] = {
+
+		90,30,
+		size.width - 90, 30,
+		size.width / 2, size.width - 180
+
+	};
+	
+	GLfloat colors[] = {
+
+		1, 0, 0, 1,
+		0, 1, 0, 1,
+		0, 0, 1, 1
+
+	};
+
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	glEnable(GL_POLYGON_SMOOTH);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glGenVertexArrays(1, &vao);
+
+	glGenBuffers(1, &vbo1);
+	glGenBuffers(1, &vbo2);
+
+
+	glBindVertexArray(vao);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo1);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo2);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
+
+	glBindVertexArray(0);
+
+
+	CHECK_GL_ERROR_DEBUG();
+
+}
+
+
+void HelloWorld::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t parentFlags)
+{
+	Layer::draw(renderer, transform, parentFlags);
+	CustomCommand *_customCommand = new CustomCommand();
+	_customCommand->init(_globalZOrder, transform, parentFlags);
+	_customCommand->func = CC_CALLBACK_0(HelloWorld::onDraw, this, transform, parentFlags);
+	Director::getInstance()->getRenderer()->addCommand(_customCommand);
+
+}
+
+void HelloWorld::onDraw(const Mat4 &transform, uint32_t flags)
+{
+	
+	getGLProgramState()->applyGLProgram(transform);
+
+	glBindVertexArray(vao);
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 3);
+
+	glBindVertexArray(0);
+
+	CHECK_GL_ERROR_DEBUG();
 }
