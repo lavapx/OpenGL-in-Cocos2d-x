@@ -68,3 +68,4 @@ proj.win32/Debug.win32/libcocos2d.exp
 proj.win32/Debug.win32/fonts/Marker Felt.ttf
 proj.win32/Debug.win32/Shaders/BasicShader.frag
 proj.win32/Debug.win32/Shaders/BasicShader.vert
+*.cache

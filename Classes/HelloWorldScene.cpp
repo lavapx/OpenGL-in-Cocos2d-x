@@ -6,81 +6,81 @@ USING_NS_CC;
 
 Scene* HelloWorld::createScene()
 {
-    // 'scene' is an autorelease object
-    auto scene = Scene::create();
-    
-    // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
+	// 'scene' is an autorelease object
+	auto scene = Scene::create();
+	
+	// 'layer' is an autorelease object
+	auto layer = HelloWorld::create();
 
-    // add layer as a child to scene
-    scene->addChild(layer);
+	// add layer as a child to scene
+	scene->addChild(layer);
 
-    // return the scene
-    return scene;
+	// return the scene
+	return scene;
 }
 
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
-    //////////////////////////////
-    // 1. super init first
-    if ( !Layer::init() )
-    {
-        return false;
-    }
-    
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	//////////////////////////////
+	// 1. super init first
+	if ( !Layer::init() )
+	{
+		return false;
+	}
+	
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
+	/////////////////////////////
+	// 2. add a menu item with "X" image, which is clicked to quit the program
+	//    you may modify it.
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
-    closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
+	// add a "close" icon to exit the progress. it's an autorelease object
+	auto closeItem = MenuItemImage::create(
+										   "CloseNormal.png",
+										   "CloseSelected.png",
+										   CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+	
+	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
+								origin.y + closeItem->getContentSize().height/2));
 
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+	// create menu, it's an autorelease object
+	auto menu = Menu::create(closeItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, 1);
 
-    /////////////////////////////
-    // 3. add your codes below...
+	/////////////////////////////
+	// 3. add your codes below...
 	this->createGL();
-    
-    return true;
+	
+	return true;
 }
 
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-    //Close the cocos2d-x game scene and quit the application
-    Director::getInstance()->end();
+	//Close the cocos2d-x game scene and quit the application
+	Director::getInstance()->end();
 
-    #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
-    
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() and exit(0) as given above,instead trigger a custom event created in RootViewController.mm as below*/
-    
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
-    
-    
+	#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	exit(0);
+	#endif
+	
+	/*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() and exit(0) as given above,instead trigger a custom event created in RootViewController.mm as below*/
+	
+	//EventCustom customEndEvent("game_scene_close_event");
+	//_eventDispatcher->dispatchEvent(&customEndEvent);
+	
+	
 }
 
 void HelloWorld::createGL()
 {
 
-	glProgram = GLProgram::createWithFilenames("Shaders/BasicShader.vert", "Shaders/BasicShader.frag");
+	_glProgram = GLProgram::createWithFilenames("Shaders/BasicShader.vert", "Shaders/BasicShader.frag");
 
-	auto glProgramState = GLProgramState::create(glProgram);
+	auto glProgramState = GLProgramState::create(_glProgram);
 	setGLProgramState(glProgramState);
 
 	CHECK_GL_ERROR_DEBUG();
@@ -108,21 +108,21 @@ void HelloWorld::createGL()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glGenVertexArrays(1, &vao);
+	glGenVertexArrays(1, &_vao);
 
-	glGenBuffers(1, &vbo1);
-	glGenBuffers(1, &vbo2);
+	glGenBuffers(1, &_vbo1);
+	glGenBuffers(1, &_vbo2);
 
 
-	glBindVertexArray(vao);
+	glBindVertexArray(_vao);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo1);
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo1);
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo2);
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo2);
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
@@ -151,7 +151,7 @@ void HelloWorld::onDraw(const Mat4 &transform, uint32_t flags)
 	
 	getGLProgramState()->applyGLProgram(transform);
 
-	glBindVertexArray(vao);
+	glBindVertexArray(_vao);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
